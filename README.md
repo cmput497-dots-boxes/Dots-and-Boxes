@@ -1,6 +1,7 @@
 # Dots-and-Boxes
 from: http://www.math.ucla.edu/~tom/Games/dots&boxes_hints.html
-Some hints for solve this game
+
+
 Some Strategy For Dots and Boxes
 In the game of Dots and Boxes, the winner is generally the player who makes the last move. The reason for this is that at the end of the game, there are usually a few long corridors or chains of boxes left to be taken. If your opponent is forced to play in one of these chains, then you can take all but two of the boxes and, by sacrificing the last two boxes, make certain that it is his turn to play into the next long chain. You will thus win all but two boxes in each long chain, and of course you will win all boxes in the last chain. We say a chain is long if it contains at least three boxes.
 The above program for playing Dots and Boxes uses an algorithm that is not very good, but it will play well once there are only long chains left. You may use it to improve your play at the next level of understanding. This next level requires determining which player will move last. This is most usefully done using the following rule.
