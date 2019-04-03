@@ -58,7 +58,7 @@ class DotsBoxesBoard(object):
         return False
     def checkfill(self,x,y):
         if np.sum(self.blocks[x][y] == 0) == 1:
-            print(111)
+
             self.blocks[x][y][COLORED] = FILL
 
     def switchplayer(self):
@@ -83,7 +83,7 @@ class DotsBoxesBoard(object):
 
     def findfill(self):
         indexes = np.where(self.blocks == FILL)
-        if not indexes[0] :
+        if len(indexes[0]) == 0 :
             return -1,-1
         x = indexes[0][0]
         y = indexes[1][0]
