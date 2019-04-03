@@ -15,6 +15,7 @@ class Chess_Board_Canvas(tkinter.Canvas):
     def __init__(self, master, height, width, board):
 
         tkinter.Canvas.__init__(self, master, height=(height+1)*B_SIZE, width=(width+1)*B_SIZE+30)
+        self.master = master
         self.height = height
         self.width = width
         self.board = board
@@ -74,18 +75,20 @@ class Chess_Board_Canvas(tkinter.Canvas):
                 self.board.switchplayer()
         # if self.board.currentplayer == PLAYER2:
         #     self.board.genmove()
+    def clear_board(self):
+        tkinter.Canvas.delete(self.b)
 
-class Chess_Board_Frame(tkinter.Frame):
-    def __init__(self, master=None):
-        tkinter.Frame.__init__(self, master)
-        # self.create_widgets()
 
-    def create_widgets(self,height,width):
-        board = DotsBoxesBoard(width,height)
-        self.chess_board_label_frame = tkinter.LabelFrame(self, text="Chess Board", padx=5, pady=5)
-        self.chess_board_canvas = Chess_Board_Canvas(self.chess_board_label_frame, height, width, board)
 
-        self.chess_board_canvas.bind('<Button-1>', self.chess_board_canvas.click1)
-
-        self.chess_board_label_frame.pack()
-        self.chess_board_canvas.pack()
+    # def __init__(self, parent, controller):
+    #     tk.Frame.__init__(self, parent)
+    #     label = tk.Label(self, text="Start Page", font=LARGE_FONT)
+    #     label.pack(pady=10, padx=10)
+    #
+    #     button = tk.Button(self, text="player vs player",
+    #                        command=lambda: controller.show_frame(GUI.Chess_Board_Frame))
+    #     button.pack()
+    #
+    #     button2 = tk.Button(self, text="Visit Page 2",
+    #                         command=lambda: controller.show_frame(PageTwo))
+    #     button2.pack()

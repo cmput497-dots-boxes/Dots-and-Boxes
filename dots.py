@@ -18,7 +18,7 @@ class DotsBoxesBoard(object):
     def __init__(self, width,height):
 
         # Creates a Dots Boxes Board of given size
-
+        print(width)
         assert 2 <= width <= MAXSIZE
 
         assert 2 <= height <= MAXSIZE
