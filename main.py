@@ -1,5 +1,7 @@
 import GUI
 import tkinter as tk
+from dots import PLAYER1,PLAYER2
+
 class quitButton(tk.Button):
     def __init__(self, parent):
         tk.Button.__init__(self, parent)
@@ -26,7 +28,7 @@ class SeaofBTCapp(tk.Tk):
 
         for F in (StartPage,Chess_Board_Frame):
             if F == Chess_Board_Frame:
-                frame = F(container, self,5,6)
+                frame = F(container, self,4,3)
             else:
                 frame = F(container, self)
 
@@ -55,6 +57,7 @@ class Chess_Board_Frame(tk.Frame):
                             command=lambda: controller.show_frame(StartPage))
         button1.pack()
 
+
 class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -62,9 +65,9 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Dots and boxes", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        button = tk.Button(self, text="player vs player",
-                           command=lambda: controller.show_frame(Chess_Board_Frame))
-        button.pack()
+        # button = tk.Button(self, text="player vs player",
+        #                    command=lambda: controller.show_frame(Chess_Board_Frame))
+        # button.pack()
 
         button2 = tk.Button(self, text="player vs computer",
                             command=lambda: controller.show_frame(Chess_Board_Frame))

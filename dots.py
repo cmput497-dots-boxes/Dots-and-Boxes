@@ -1,5 +1,5 @@
 import numpy as np
-
+import random
 
 MAXSIZE = 20
 PLAYER1 = 2
@@ -12,6 +12,7 @@ RIGHT = 2
 TOP = 3
 COLORED = 4
 FILL = 5
+UNFILL = 6
 
 
 class DotsBoxesBoard(object):
@@ -37,7 +38,13 @@ class DotsBoxesBoard(object):
         # self.columns = np.full((width+1)*length, EMPTY, dtype = np.int32)
         # self.rows = np.zeros((width-1,height))
         # self.columns = np.zeros(())
-        self.blocks = np.zeros((width-1,height-1,5))
+        self.init_blocks(width-1,height-1)
+
+    def init_blocks(self,x,y):
+        self.blocks = np.zeros((x,y,5))
+        for i in range (x):
+            for j in range (y):
+                self.blocks[i][j][4] = UNFILL
         self.currentplayer = PLAYER1
 
     def checkline(self,point1,point2):
@@ -57,13 +64,71 @@ class DotsBoxesBoard(object):
                     return True
         return False
     def checkfill(self,x,y):
-        if np.sum(self.blocks[x][y] == 0) == 1:
-
+        if np.sum(self.blocks[x][y] == 0) == 0:
             self.blocks[x][y][COLORED] = FILL
 
     def switchplayer(self):
         self.currentplayer = 5 - self.currentplayer
 
+    def gen_legal_move(self):
+        indexes = np.where(self.blocks == EMPTY)
+        moves = []
+        for i in range(len(indexes[0])):
+            temp = [indexes[0][i],indexes[1][i],indexes[2][i]]
+            moves.append(temp)
+        return moves
+
+    def gen_legal_boxes(self):
+        indexes = np.where(self.blocks == EMPTY)
+        moves = []
+        for i in range(len(indexes[0])):
+            temp = [indexes[0][i],indexes[1][i]]
+            moves.append(temp)
+        return moves
+
+    def move_to_point(self,move):
+        if move[2] == 0:
+            x = [move[0],move[1]]
+            y = [move[0],move[1]+1]
+        elif move[2] == 1:
+            x = [move[0],move[1]+1]
+            y = [move[0]+1,move[1]+1]
+        elif move[2] == 2:
+            x = [move[0]+1,move[1]+1]
+            y = [move[0]+1,move[1]]
+        elif move[2] == 3:
+            x = [move[0]+1,move[1]]
+            y = [move[0],move[1]]
+        return x,y
+
+
+    def aviodtwo(self):
+        boxes = self.gen_legal_boxes()
+        t_boxes = []
+        moves = []
+
+        for i in range(len(boxes)):
+            num = boxes.count(boxes[i])
+            if num >=3:
+                t_boxes.append((boxes[i][0],boxes[i][1]))
+        t_boxes = list(dict.fromkeys(t_boxes))
+        for i in range(len(t_boxes)):
+            indexes = np.where(self.blocks[t_boxes[i][0]][t_boxes[i][1]] == EMPTY)
+            for j in range(len(indexes[0])):
+                temp = [t_boxes[i][0], t_boxes[i][1], indexes[0][j]]
+                moves.append(temp)
+            return moves
+
+    def aimove(self):
+        moves = self.gen_legal_move()
+        if len(moves) == 0:
+            return (-1,-1)
+        avtmoves = self.aviodtwo()
+        move = random.choice(moves)
+        if avtmoves:
+            move = random.choice(avtmoves)
+        x,y = self.move_to_point(move)
+        return(x,y)
 
     def drawline(self,point1,point2):
         if point1[0] == point2[0]:
