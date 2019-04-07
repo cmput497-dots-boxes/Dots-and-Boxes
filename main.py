@@ -1,6 +1,22 @@
 import GUI
 import tkinter as tk
+import sys
+
+from tkinter import *
 from dots import PLAYER1,PLAYER2
+w = 3
+h = 4
+# def gettext(a,b):
+#     global w,h
+#     string = a.get()
+#     # print(string)
+#     try:
+#         w = int(string)
+#         string = b.get()
+#         h = int(string)
+#         print (w)
+#     except:
+#         return
 
 class quitButton(tk.Button):
     def __init__(self, parent):
@@ -15,7 +31,7 @@ LARGE_FONT = ("Verdana", 12)
 
 class SeaofBTCapp(tk.Tk):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,width,height, *args, **kwargs):
         tk.Tk.__init__(self, *args, **kwargs)
         container = tk.Frame(self)
 
@@ -28,10 +44,9 @@ class SeaofBTCapp(tk.Tk):
 
         for F in (StartPage,Chess_Board_Frame):
             if F == Chess_Board_Frame:
-                frame = F(container, self,4,3)
+                frame = F(container, self,width,height)
             else:
                 frame = F(container, self)
-
             self.frames[F] = frame
 
             frame.grid(row=0, column=0, sticky="nsew")
@@ -65,8 +80,8 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Dots and boxes", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
-        # button = tk.Button(self, text="player vs player",
-        #                    command=lambda: controller.show_frame(Chess_Board_Frame))
+        # button = tk.Button(self, text="Set board size",
+        #                    command=lambda: controller.show_frame(PageOne))
         # button.pack()
 
         button2 = tk.Button(self, text="player vs computer",
@@ -78,18 +93,24 @@ class StartPage(tk.Frame):
 #
 #     def __init__(self, parent, controller):
 #         tk.Frame.__init__(self, parent)
-#         label = tk.Label(self, text="Page One!!!", font=LARGE_FONT)
+#         label = tk.Label(self, text="Set width", font=LARGE_FONT)
 #         label.pack(pady=10, padx=10)
+#         e = tk.Entry(self)
+#         e.pack()
+#         label2 = tk.Label(self, text="Set height", font=LARGE_FONT)
+#         label2.pack(pady=10, padx=10)
+#         f = tk.Entry(self)
+#         f.pack()
+#         # e.focus_set()
+#         b = tk.Button(self, text='okay', command=gettext(e,f))
+#         b.pack()
 #
 #         button1 = tk.Button(self, text="Back to Home",
 #                             command=lambda: controller.show_frame(StartPage))
 #         button1.pack()
-#
-#         button2 = tk.Button(self, text="Page Two",
-#                             command=lambda: controller.show_frame(PageTwo))
-#         button2.pack()
-#
-#
+
+
+
 # class PageTwo(tk.Frame):
 #
 #     def __init__(self, parent, controller):
@@ -108,7 +129,15 @@ class StartPage(tk.Frame):
 
 
 if __name__ == '__main__':
-    app = SeaofBTCapp()
+    width = 3
+    height = 4
+    try:
+        width = int(sys.argv[1])
+        height = int(sys.argv[2])
+    except:
+        print("Create game with default setting")
+
+    app = SeaofBTCapp(width,height)
     quitButton(app)
     app.mainloop()
     #

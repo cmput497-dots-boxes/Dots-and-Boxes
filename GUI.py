@@ -5,7 +5,7 @@
 import tkinter
 from tkinter import *
 import math
-from dots import DotsBoxesBoard,PLAYER1,PLAYER2
+from dots import DotsBoxesBoard,PLAYER1,PLAYER2,EMPTY
 import numpy as np
 import math
 import Point
@@ -97,7 +97,7 @@ class Chess_Board_Canvas(tkinter.Canvas):
         distances[min1[0],min1[1]] = math.inf
         min2 = np.unravel_index(distances.argmin(), distances.shape)
         dis = dis + distances[min2[0],min2[1]]
-        print(min1)
+        # print(min1)
         if self.board.checkline(min1,min2) and  dis<= 600:
             x,y = self.draw_line(min1,min2)
             self.draw_rect(x,y,PLAYER)
@@ -106,10 +106,18 @@ class Chess_Board_Canvas(tkinter.Canvas):
             root = tkinter.Tk()
             T = Text(root, height=5, width=30)
             T.pack()
-            if self.board.currentplayer == PLAYER2:
+            _,winner = self.board.check_winner()
+            print(winner)
+            if winner == PLAYER2:
                 T.insert(END, "Computer wins")
-            else:
+            elif winner == PLAYER1:
                 T.insert(END, "Congratulations, you win")
+            elif winner == EMPTY:
+                T.insert(END, "draw game")
+            else:
+                T.insert(END, "unknown result")
+
+
 
             # if self.board.currentplayer == PLAYER2:
         #     self.board.genmove()
