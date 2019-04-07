@@ -422,17 +422,12 @@ def getwintimes(board, point, boardsize, size, pointsize, availablemove, move):
     wintimes = 0
     gametimes = 0
 
-    backupboard = blist.copy()
-    backuppoint = plist.copy()
-    backupmove = availablemove.copy()
-    backupmove.remove(move) 
-
     if CheckScore(blist, plist, boardsize, size, move, r, q, 1) == 0:
         backupboard = blist.copy()
         backuppoint = plist.copy()
         backupmove = mlist.copy()
 
-        while gametimes < 15000:
+        while gametimes < 1000:
             #print("[Game " + str(gametimes) + "]", end = "")
             blist = backupboard.copy()
             plist = backuppoint.copy()
@@ -493,7 +488,7 @@ def getwintimes(board, point, boardsize, size, pointsize, availablemove, move):
         backupboard = blist.copy()
         backuppoint = plist.copy()
         backupmove = mlist.copy()
-        while gametimes < 15000:
+        while gametimes < 1000:
             #print("[Game " + str(gametimes) + "]", end = "")
             blist = backupboard.copy()
             plist = backuppoint.copy()
@@ -557,18 +552,18 @@ def getwintimes(board, point, boardsize, size, pointsize, availablemove, move):
 
 
 
-def MCTS(board, point, boardsize, size, pointsize):
+def MCTS(board, point, boardsize, size, pointsize, availablemove):
     #print("===================MCTS===================")
     #displayboard(board, point, size)
-    availablemove = GetAvailable(board, boardsize)
     if not availablemove:
         exit()
     #print(*availablemove)
     maxmove = -1
     finalmove = -1
+    nlist = GetAvailable(board, boardsize)
     for move in availablemove:
         #print("Move: " + str(move))
-        current = getwintimes(board, point, boardsize, size, pointsize, availablemove, move)
+        current = getwintimes(board, point, boardsize, size, pointsize, nlist, move)
         #print("Current: " + str(current))
         if current >= maxmove:
             maxmove = current
@@ -593,26 +588,29 @@ def randplayer(board, point, boardsize, size, pointsize):
             nmove.append(move)
         if (CheckOneMove(board, point, boardsize, size, move, r, q) == 1):
             omove.append(move)
-    """
+    
     print("All two Move List: ", end = "")
     print(*nmove)
     print("All Three Move List: ", end = "")
     print(*omove)
     print("\n")
-    """
+    
     displayboard(board, point, size)
     invalid = True
     while invalid == True:
-        time.sleep(0.5)
         #coord = randint(0, boardsize - 1) 
         if omove:
-            coord = random.choice(omove)
+            #coord = random.choice(omove)
+            #print(*omove)
+            coord = MCTS(board, point, boardsize, size, pointsize, omove)
             print("Computer Chose " + str(coord))      
-        if nmove and not omove:
-            coord = random.choice(nmove)
+        if nmove and (not omove):
+            #print(*nmove)
+            #coord = random.choice(nmove)
+            coord = MCTS(board, point, boardsize, size, pointsize, nmove)
             print("Computer Chose " + str(coord))
-        if not nmove and not omove:
-            coord = MCTS(board, point, boardsize, size, pointsize)
+        if (not nmove) and (not omove):
+            coord = MCTS(board, point, boardsize, size, pointsize, availablemove)
             print("Computer Chose " + str(coord))
            
         if (int(coord) > boardsize):
