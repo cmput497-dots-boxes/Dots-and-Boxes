@@ -218,15 +218,30 @@ class DotsBoxesBoard(object):
             game_end, winner = board.check_winner()
         return winner
 
+    def checkdouble(self,moves):
+        board = self.copy()
+        double_moves= []
+        for move in moves:
+            point1, point2 = self.move_to_point(move)
+            board.drawline(point1, point2)
+            indexes = np.where(board.blocks == FILL)
+            if len(indexes[0]) >= 2:
+                double_moves.append(move)
+            board.undoMove(point1, point2)
+
     def aimove(self):
         moves = self.gen_legal_move()
         if len(moves) == 0:
             return (-1,-1)
         avtmoves = self.aviodtwo()
-        move = random.choice(moves)
+        # move = random.choice(moves)
         threemov = self.checkthree()
         if threemov:
-            move = random.choice(threemov)
+            doub_moves = self.checkdouble(threemov)
+            if doub_moves:
+                move = random.choice(doub_moves)
+            else:
+                move = random.choice(threemov)
         elif avtmoves:
             move = random.choice(avtmoves)
         else:
